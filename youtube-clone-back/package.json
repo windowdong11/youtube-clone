@@ -4,7 +4,7 @@
   "description": "Backend for youtube clone app.",
   "main": "index.ts",
   "scripts": {
-    "start": "tsc-watch --noClear -p ./tsconfig.json --onSuccess \"node ./dist/index.js\"",
+    "start": "tsc-watch --noClear -p ./tsconfig.build.json --onSuccess \"node ./dist/index.js\"",
     "test": "node --test --require ts-node/register src/**.test.ts"
   },
   "author": "windowdong11",
