@@ -1,5 +1,5 @@
 # Secrets
-youtube-clone-back/src/auth0-config.secret.json
+*.secret.json
 
 
 # Logs
