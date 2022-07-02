@@ -4,14 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from "@auth0/auth0-react";
+import authconfig from './auth0-config.secret.json';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <Auth0Provider
-    domain="youtube-clone.jp.auth0.com"
-    clientId="JPLfbYEORPLzQnMZhVhOL4M71Zy0tJf7"
+    domain={authconfig.domain}
+    clientId={authconfig.clientId}
     redirectUri={window.location.origin}
   >
     <App />

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-
 import { useAuth0 } from "@auth0/auth0-react";
-
-// styles
-import "./App.css";
+import authConfig from './auth0-config.secret.json'
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -37,7 +34,28 @@ const Profile = () => {
   )
 };
 
-const Posts = () => {
+const Public = () => {
+  const [result, setResult] = useState<string>();
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/public', {
+          method: 'GET',
+        });
+        setResult((await response.json()).message);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+  console.log(result)
+
+  if(!result) return <div>Public : Loading...</div>;
+
+  return <div>Public : {result}</div>
+}
+
+const Private = () => {
   const { getAccessTokenSilently } = useAuth0();
   const [posts, setPosts] = useState(null);
 
@@ -45,8 +63,7 @@ const Posts = () => {
     (async () => {
       try {
         const token = await getAccessTokenSilently({
-          audience: 'https://youtube-clone.jp.auth0.com/api/v2/',
-          scope: 'read:messages',
+          audience: authConfig.audience,
         });
         console.log(`Bearer ${token}`);
         const response = await fetch('http://localhost:8000/api/private', {
@@ -70,27 +87,6 @@ const Posts = () => {
     <div>{posts}</div>
   );
 };
-
-const Public = () => {
-  const [result, setResult] = useState<string>();
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/public', {
-          method: 'GET',
-        });
-        setResult((await response.json()).message);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-  }, []);
-  console.log(result)
-
-  if(!result) return <div>Public : Loading...</div>;
-
-  return <div>Public : {result}</div>
-}
 
 const App = () => {
   const { isLoading, error, isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -122,7 +118,7 @@ const App = () => {
       <Public/>
       Authenticated
       <Profile/>
-      <Posts/>
+      <Private/>
       <LogoutButton/>
     </div>
   );
