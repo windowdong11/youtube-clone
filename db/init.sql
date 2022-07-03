@@ -8,6 +8,11 @@ CREATE TABLE website_user (
   updated_at timestamp NOT NULL DEFAULT now()
 );
 
+CREATE TABLE auth0_user (
+  user_id integer NOT NULL REFERENCES website_user(user_id),
+  auth0_id text NOT NULL
+);
+
 CREATE TABLE channel (
   channel_id serial PRIMARY KEY,
   user_id integer NOT NULL REFERENCES website_user(user_id) ON DELETE CASCADE ON UPDATE CASCADE,
