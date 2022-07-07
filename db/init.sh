@@ -57,3 +57,5 @@ $execute_as_postgres createdb $new_db_name
 
 # Execute init.sql
 $execute_as_postgres psql -f $cur_dir/init.sql -d $new_db_name
+# Execute init.sql
+$execute_as_postgres psql -f $cur_dir/add_auth0.sql -d $new_db_name
