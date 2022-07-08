@@ -52,7 +52,7 @@ then
   esac
 fi
 echo "Create DB : $new_db_name"
-$execute_as_postgres createdb $new_db_name
+$execute_as_postgres createdb -O $db_creator_name $new_db_name
 
 # Execute init.sql
 $execute_as_postgres psql -f $cur_dir/init.sql -d $new_db_name
