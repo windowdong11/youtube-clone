@@ -23,7 +23,6 @@ fi
 
 service postgresql start
 
-# is_postgresql_pre_installed=false
 cur_dir=$(pwd)
 cd ~postgres/
 
@@ -57,5 +56,5 @@ $execute_as_postgres createdb $new_db_name
 
 # Execute init.sql
 $execute_as_postgres psql -f $cur_dir/init.sql -d $new_db_name
-# Execute init.sql
-$execute_as_postgres psql -f $cur_dir/add_auth0.sql -d $new_db_name
+# Execute use_auth0.sql
+$execute_as_postgres psql -f $cur_dir/use_auth0.sql -d $new_db_name
