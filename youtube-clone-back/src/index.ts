@@ -1,13 +1,23 @@
-import express from 'express'
+import express from 'express';
+import https from 'https';
+import fs from 'fs';
 import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
 import authconfig from './auth0-config.secret.json';
+import sslconfig from './ssl.secret.json';
+
+const clients = [
+  'https://windowdong11.ga'
+]
+const port = {
+  https: 8443,
+}
 
 const app = express()
-const port = 8000
 
+app.use(express.json())
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Allow CORS, React App URL
-  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  res.setHeader('Access-Control-Allow-Origin', 'https://windowdong11.ga'); // Allow CORS, React App URL
+  res.setHeader('Access-Control-Allow-Methods', ['GET', 'POST', 'PUT', 'DELETE']);
   res.setHeader('Access-Control-Allow-Headers', 'authorization');
   next();
 });
@@ -44,6 +54,11 @@ app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server open at ${port}`)
+const httpsOptions : https.ServerOptions = {
+  key: fs.readFileSync(sslconfig.privatekey),
+  cert: fs.readFileSync(sslconfig.certchain),
+};
+
+https.createServer(httpsOptions,app).listen(port.https, () => {
+  console.log(`Https server running at ${port.https}`)
 })
