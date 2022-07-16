@@ -1,5 +1,7 @@
 # Secrets
 *.secret.json
+*.env.*
+*.env
 
 
 # Logs

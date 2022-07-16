@@ -2,11 +2,21 @@ import express from 'express';
 import https from 'https';
 import fs from 'fs';
 import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
-import authconfig from './auth0-config.secret.json';
-import sslconfig from './ssl.secret.json';
+import dotenv from 'dotenv';
+import path from 'path';
+
+if (process.env.NODE_ENV === 'production') {
+  dotenv.config({ path: path.join(__dirname, '../.env.production') })
+} else if (process.env.NODE_ENV === 'development') {
+  dotenv.config({ path: path.join(__dirname, '../.env.development') })
+} else {
+  dotenv.config({ path: path.join(__dirname, '../.env.development') })
+  // 노란색으로 출력
+  console.log('\x1b[33m%s\x1b[0m', '\n환경변수 NODE_ENV를 설정하지 않았습니다.\nNODE_ENV 환경변수를 설정해주세요. [production, development](default : development)\nex) NODE_ENV=production npm start\n')
+}
 
 const clients = [
-  'https://windowdong11.ga'
+  process.env.CLIENT
 ]
 const port = {
   https: 8443,
@@ -25,8 +35,8 @@ app.use((req, res, next) => {
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
 const checkJwt = auth({
-  audience: authconfig.audience,
-  issuerBaseURL: `https://${authconfig.domain}`,
+  audience: process.env.AUTH0_AUDIENCE,
+  issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
 });
 
 app.head('/api', (req, res) => {
@@ -55,8 +65,8 @@ app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
 });
 
 const httpsOptions : https.ServerOptions = {
-  key: fs.readFileSync(sslconfig.privatekey),
-  cert: fs.readFileSync(sslconfig.certchain),
+  key: fs.readFileSync(process.env.SSL_PRIVATE_KEY),
+  cert: fs.readFileSync(process.env.SSL_CERT_CHAIN),
 };
 
 https.createServer(httpsOptions,app).listen(port.https, () => {
