@@ -4,15 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Auth0Provider } from "@auth0/auth0-react";
-import authconfig from './auth0-config.secret.json';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <Auth0Provider
-    domain={authconfig.domain}
-    clientId={authconfig.clientId}
+    domain={process.env.REACT_APP_AUTH0_DOMAIN}
+    clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
+    audience={process.env.REACT_APP_AUTH0_AUDIENCE}
     redirectUri={window.location.origin}
   >
     <App />

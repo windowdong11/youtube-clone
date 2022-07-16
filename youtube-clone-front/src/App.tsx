@@ -61,9 +61,7 @@ const Private = () => {
   useEffect(() => {
     (async () => {
       try {
-        const token = await getAccessTokenSilently({
-          audience: process.env.REACT_APP_AUTH0_AUDIENCE
-        });
+        const token = await getAccessTokenSilently();
         console.log(`Bearer ${token}`);
         const response = await fetch(`${process.env.REACT_APP_API_SERVER}/private`, {
           headers: {
