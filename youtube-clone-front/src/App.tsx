@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import authConfig from './auth0-config.secret.json'
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
@@ -39,7 +38,7 @@ const Public = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/public', {
+        const response = await fetch(`${process.env.REACT_APP_API_SERVER}/public`, {
           method: 'GET',
         });
         setResult((await response.json()).message);
@@ -63,10 +62,10 @@ const Private = () => {
     (async () => {
       try {
         const token = await getAccessTokenSilently({
-          audience: authConfig.audience,
+          audience: process.env.REACT_APP_AUTH0_AUDIENCE
         });
         console.log(`Bearer ${token}`);
-        const response = await fetch('http://localhost:8000/api/private', {
+        const response = await fetch(`${process.env.REACT_APP_API_SERVER}/private`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -108,7 +107,7 @@ const App = () => {
   if (!isAuthenticated) {
     return <div>
       <Public/>
-      Authenticated : {accessToken}
+      Public
       <LoginButton/>
       </div>
   }
@@ -116,7 +115,7 @@ const App = () => {
   return (
     <div>
       <Public/>
-      Authenticated
+      Private, Authenticated JWT : {accessToken}
       <Profile/>
       <Private/>
       <LogoutButton/>
