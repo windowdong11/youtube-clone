@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022", 
-    "lib": ["ES2022"], 
+    // DOM is only for fetch api
+    // global fetch is experimental api in node v18. DefinitelyTyped does not support it.
+    // github issue : https://github.com/DefinitelyTyped/DefinitelyTyped/issues/60924
+    "lib": ["ES2022", "DOM"], 
     "module": "commonjs", 
     "moduleResolution": "node", 
     "esModuleInterop": true, 
